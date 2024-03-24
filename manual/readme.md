@@ -1,13 +1,13 @@
-MyShell(1)                            General Commands Manual                            MyShell(1)
+MyShell/ash(1)                            General Commands Manual                            MyShell/ash(1)
 
 NAME
-       MyShell - My Shell
+       MyShell/ash - Ayden's SHell
 
 SYNOPSIS
-       myshell [batch_file]
+       myshell [command | file]
 
 DESCRIPTION
-       myshell is a simple shell program that provides a basic command-line interface for
+       ash is a simple shell program that provides a basic command-line interface for
        interacting with the operating system. It supports executing commands,
        navigating directories, managing environment variables, and handling signals.
        The design and implementation of MyShell are based on established principles and
@@ -15,7 +15,7 @@ DESCRIPTION
 
 OPTIONS
        batch_file
-              If specified, myshell operates in batch mode, reading commands from the
+              If specified, ash operates in batch mode, reading commands from the
               specified file instead of interactively from the user.
 
 COMMANDS
@@ -42,6 +42,27 @@ COMMANDS
        pause  Pause the shell until the user presses Enter.
 
        quit   Exit the shell.
+
+ENVIRONMENT variables
+        Environment variables are key-value pairs that are used by the shell and other 
+        programs to retrieve information about the environment the shell operates in. 
+        ash allows users to view and set environment variables, affecting the execution 
+        of programs and scripts. For example, the PATH variable dictates the directories in 
+        which the shell looks for executables.
+
+I/O REDIRECTION
+        MyShell supports basic input/output redirection, enabling users to redirect the input 
+        and output of commands to files or from one command to another:
+
+        > filename      Redirects the output of a command to a file, overwriting the existing contents.
+        < filename      Takes the input for a command from a file.
+        >> filename     Redirects the output of a command to a file, appending to its existing contents.
+
+PROCESS CONCEPT
+        ash can execute commands as either foreground or background processes:
+
+        Foreground execution: The shell waits for the command to complete before accepting new input.
+        Background execution: By appending & to a command, it is executed in the background, allowing the shell to accept new commands immediately.
 
 SIGNAL HANDLING
        SIGINT (Ctrl+C)
