@@ -6,4 +6,3 @@ CFLAGS=-Wall
 
 myshell: myshell.c shell_commands.c utility.c
 	$(CC) $(CFLAGS) myshell.c shell_commands.c utility.c -o myshell
-	

@@ -43,7 +43,7 @@ COMMANDS
 
        quit   Exit the shell.
 
-ENVIRONMENT variables
+ENVIRONMENT VARIABLES
         Environment variables are key-value pairs that are used by the shell and other 
         programs to retrieve information about the environment the shell operates in. 
         ash allows users to view and set environment variables, affecting the execution 
@@ -89,3 +89,15 @@ REFERENCES
        Stevens, W.R., & Rago, S.A. (2013). 'Advanced Programming in the UNIX Environment, Third Edition'.
        Addison-Wesley Professional.
 
+STATEMENT OF NON-PLAGIARISM
+    I hereby declare that I have written this submission and that it is all my own work. 
+    I understand that my work may be checked for plagiarism and 
+    that I would be penalized if it is found to be plagiarized.
+
+    I understand that the University regards breaches of academic integrity and plagiarism as grave and serious. 
+    I have read and understood the DCU Academic Integrity and Plagiarism Policy. I accept the penalties that may be 
+    imposed should I engage in practice or practices that breach this policy.
+
+    - Student Number: 22406966
+    - Student Name: Ayden Jahola
+    - Date: 24/03/2024
