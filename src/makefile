@@ -2,4 +2,5 @@
 # ca216/myshell
 
 myshell: myshell.c shell_commands.c utility.c
-	gcc -Wall myshell.c shell_commands.c utility.c -o myshell
+	mkdir -p ../bin
+	gcc -Wall myshell.c shell_commands.c utility.c -o ../bin/myshell
