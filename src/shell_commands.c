@@ -33,17 +33,21 @@ void handle_redirection(char *args[], int *numArgs) {
         // Handle input redirection symbol '<'
         if (strcmp(args[i], "<") == 0) {
             // Open the specified input file for reading only
-            fd = open(args[i + 1], O_RDONLY);
+            fd = open(args[i + 1], O_RDONLY); // open - Open a file descriptor. https://man7.org/linux/man-pages/man2/open.2.html alternative, run: man 2 open
             if (fd < 0) {
-                perror("Failed to open input file"); // Print error if the file cannot be opened
-                exit(EXIT_FAILURE); // Exit the shell due to this critical error
+                perror("Failed to open input file"); // Print error if the file cannot be opened, perror - Print a system error message. https://man7.org/linux/man-pages/man3/perror.3.html alternative run: man 3 perror
+
+                exit(EXIT_FAILURE); // Exit the shell due to this critical error, exit - Cause normal process termination. https://man7.org/linux/man-pages/man3/exit.3.html alternative run: man 3 exit
+
             }
-            dup2(fd, STDIN_FILENO); // Redirect standard input to the file
+            dup2(fd, STDIN_FILENO); // Redirect standard input to the file, dup2 - Duplicate a file descriptor. https://man7.org/linux/man-pages/man2/dup2.2.html alternative run: man 2 dup2
+
             close(fd); // Close the file descriptor as it's no longer needed directly
             
             // Remove the redirection symbol and the filename from the command arguments
             // This prevents them from being treated as regular arguments by the executing command
-            memmove(&args[i], &args[i + 2], (*numArgs - i - 2) * sizeof(char *));
+            memmove(&args[i], &args[i + 2], (*numArgs - i - 2) * sizeof(char *)); // memmove - Copy byte sequence. https://man7.org/linux/man-pages/man3/memmove.3.html alternative run: man 3 memmove
+
             *numArgs -= 2; // Adjust the count of arguments accordingly
             i--; // Adjust the loop index to account for the removed arguments
         }
@@ -69,6 +73,13 @@ void handle_redirection(char *args[], int *numArgs) {
     }
 }
 
+// Online References for the hande_redirection function:
+// [1] open - Open a file descriptor. https://man7.org/linux/man-pages/man2/open.2.html alternative, run: man 2 open
+// [2] perror - Print a system error message. https://man7.org/linux/man-pages/man3/perror.3.html alternative run: man 3 perror
+// [3] exit - Cause normal process termination. https://man7.org/linux/man-pages/man3/exit.3.html alternative run: man 3 exit
+// [4] dup2 - Duplicate a file descriptor. https://man7.org/linux/man-pages/man2/dup2.2.html alternative run: man 2 dup2
+// [5] memmove - Copy byte sequence. https://man7.org/linux/man-pages/man3/memmove.3.html alternative run: man 3 memmove
+
 
 void execute_command(char *args[], int numArgs) {
     // Handle I/O redirection
@@ -86,15 +97,19 @@ void execute_command(char *args[], int numArgs) {
         if (numArgs == 1) { // No arguments provided, change to home directory
             char cwd[1024]; // Buffer to store the current working directory
             if (getcwd(cwd, sizeof(cwd)) != NULL) { // Get the current working directory
-                printf("%s\n", cwd); // Print the current working directory
+                printf("%s\n", cwd); // Print the current working directory, printf: https://man7.org/linux/man-pages/man3/printf.3.html alternative run: man 3 printf
+
             } else { // Error handling for getcwd() failure
-                perror("getcwd() error"); // Print an error message
+                perror("getcwd() error"); // Print an error message, perror: https://man7.org/linux/man-pages/man3/perror.3.html alternative run: man 3 perror
+
             }
         } else { // Change to the specified directory
-            if (chdir(args[1]) != 0) { // Attempt to change the directory
+            if (chdir(args[1]) != 0) { // Attempt to change the directory, chdir: https://man7.org/linux/man-pages/man2/chdir.2.html alternative run: man 2 chdir
+
                 perror("chdir() failed");  // Print an error message if chdir() fails
             } else { // Directory change successful
-                setenv("PWD", args[1], 1); // Update PWD environment variable
+                setenv("PWD", args[1], 1); // Update PWD environment variable, setenv: https://man7.org/linux/man-pages/man3/setenv.3.html alternative run: man 3 setenv
+
             }
         }
     } else if (strcmp(args[0], "clr") == 0) { // Clear the screen
@@ -103,7 +118,8 @@ void execute_command(char *args[], int numArgs) {
         char *dir = numArgs > 1 ? args[1] : "."; // Default to current directory if no argument provided
         DIR *d; // Directory stream
         struct dirent *dirEntry; // Directory entry
-        d = opendir(dir); // Open the directory
+        d = opendir(dir); // Open the directory, opendir/readdir/closedir: https://man7.org/linux/man-pages/man3/opendir.3.html alternative run: man 3 opendir
+
         if (d) { // Directory opened successfully
             while ((dirEntry = readdir(d)) != NULL) { // Read each directory entry
                 printf("%s\n", dirEntry->d_name); // Print the name of the entry
@@ -124,7 +140,8 @@ void execute_command(char *args[], int numArgs) {
         }
         printf("\n"); // Print a newline at the end
     } else if (strcmp(args[0], "help") == 0) { // Display help information
-        int pid = fork(); // Fork a child process
+        int pid = fork(); // Fork a child process, fork: https://man7.org/linux/man-pages/man2/fork.2.html alternative run: man 2 fork
+
         if (pid == 0) { 
             // Child process
             execlp("more", "more", "../manual/readme.md", NULL); // Execute more command to display help information
@@ -133,7 +150,8 @@ void execute_command(char *args[], int numArgs) {
             exit(1);
         } else if (pid > 0) { 
             // Parent process
-            wait(NULL); // Wait for child process to finish
+            wait(NULL); // Wait for child process to finish, wait/waitpid: https://man7.org/linux/man-pages/man2/wait.2.html alternative run: man 2 wait
+
         } else {
             // Fork failed
             perror("fork() failed");
@@ -151,7 +169,8 @@ void execute_command(char *args[], int numArgs) {
             exit(EXIT_FAILURE); // Exit the shell due to this critical error
         } else if (pid == 0) { 
             // Child process: Attempt to execute the command
-            if (execvp(args[0], args) == -1) { // Execute the command
+            if (execvp(args[0], args) == -1) { // Execute the command, execvp: https://man7.org/linux/man-pages/man3/exec.3.html alternative run: man 3 exec
+
                 perror("execvp failed"); // Print an error message if execvp fails
                 exit(EXIT_FAILURE); // Exit the child process due to this critical error
             }
@@ -166,6 +185,18 @@ void execute_command(char *args[], int numArgs) {
         }
     }
 }
+
+// Online References for the execute_command function:
+// [1] chdir: https://man7.org/linux/man-pages/man2/chdir.2.html alternative run: man 2 chdir
+// [2] execvp: https://man7.org/linux/man-pages/man3/exec.3.html alternative run: man 3 exec
+// [3] fork: https://man7.org/linux/man-pages/man2/fork.2.html alternative run: man 2 fork
+// [4] opendir/readdir/closedir: https://man7.org/linux/man-pages/man3/opendir.3.html alternative run: man 3 opendir
+// [5] perror: https://man7.org/linux/man-pages/man3/perror.3.html alternative run: man 3 perror
+// [6] printf: https://man7.org/linux/man-pages/man3/printf.3.html alternative run: man 3 printf
+// [7] setenv: https://man7.org/linux/man-pages/man3/setenv.3.html alternative run: man 3 setenv
+// [8] wait/waitpid: https://man7.org/linux/man-pages/man2/wait.2.html alternative run: man 2 wait
+
+
 
 /*
 STATEMENT OF NON-PLAGIARISM

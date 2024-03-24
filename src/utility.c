@@ -20,6 +20,13 @@ int parse_command(char *command, char *args[]) {
     return i; // Return the number of arguments
 }
 
+// Online References for the parse_command function:
+// - strtok: https://man7.org/linux/man-pages/man3/strtok.3.html alternative run: man 3 strtok
+// The strtok function is used to tokenize a string based on delimiters. In this case, it's used
+// to split a command string into individual arguments for processing. The tokens are then stored
+// in an array of character pointers, making them suitable for functions like execvp that expect
+// an array of arguments with a NULL terminator.
+
 /*
 STATEMENT OF NON-PLAGIARISM
     I hereby declare that I have written this submission and that it is all my own work. 
